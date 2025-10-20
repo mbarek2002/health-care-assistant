@@ -245,7 +245,7 @@ export const apiService = {
   },
 
   // Query 
-  queryRAG : async (question : string , conversationId?: string , topk : number = 3){
+  queryRAG : async (question : string , conversationId?: string , topk : number = 3)=>{
     return retryRequest(async ()=>{
       const {data} = await apiClient.post("/chat/query",{
         question ,
@@ -257,7 +257,7 @@ export const apiService = {
     })
   },
   // Chat 
-  chat : async (conversationId?: string , message : string ,  topk : number = 3 , historyLimit : number = 20){
+  chat : async (conversationId: string , message : string ,  topk : number = 3 , historyLimit : number = 20)=>{
     return retryRequest(async ()=>{
       const {data} = await apiClient.post("/chat",{
         conversation_id : conversationId , 
