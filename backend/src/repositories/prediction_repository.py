@@ -6,10 +6,11 @@ class PredictionRepository:
     def __init__(self, db: Database):
         self.collection = db["predictions"]
 
-    def save_prediction(self, input_data:Dict , predicted_price:float )->Dict:
+    def save_prediction(self, input_data:Dict , predicted_sleep_discord:str )->Dict:
+        
         document = {
             **input_data , 
-            "predicted_price" : predicted_price,
+            "predicted_sleep_discord" : predicted_sleep_discord,
             "created_at" : datetime.utcnow()
         }
 

@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Chat from "./pages/Chat";
 import Documents from "./pages/Documents";
 import NotFound from "./pages/NotFound";
+import SleepDiscorderDetectionPage from "./pages/SleepDisorderDetectionPage";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/signup" element={<Signup />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/documents" element={<Documents />} />
+            <Route path="/sleep-prediction" element={<SleepDiscorderDetectionPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -7,57 +7,66 @@ import os
 import pandas as pd
 import warnings
 import pickle
+from catboost import CatBoostClassifier, Pool
+
 
 class PredictionService:
     def __init__(self, db):
         self.repository = PredictionRepository(db)
-        model_path = "src/models/model.pkl"
+        model_path = "src/models/catBoost.keras"
         
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Model file '{model_path}' not found")
         
-        # self.model = joblib.load(model_path)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            with open(model_path, 'rb') as f:
-                self.model = pickle.load(f)
+        self.model = CatBoostClassifier()
+
+        self.model = self.model.load_model(model_path)
+
 
     def predict(self , data : PredictionInput) -> PredictionOutput:
         try:
-            features = [
-                "Milage_High", "Accident_Impact", "Age_Old", "Milage_Medium",
-                "clean_title", "Milage_Very High", "Vehicle_Age", "hp",
-                "Age_Mid", "engine displacement", "brand", "fuel_type",
-                "Age_Very Old", "is_v_engine", "Mileage_per_Year", "transmission"
+            
+            features =[
+                    "Gender",
+                    "Age",
+                    "Occupation",
+                    "Sleep Duration",
+                    "Quality of Sleep",
+                    "Physical Activity Level",
+                    "Stress Level",
+                    "BMI Category",
+                    "Heart Rate",
+                    "Daily Steps",
+                    "Systolic_BP",           
+                    "Diastolic_BP", 
                 ]
+
             test_data = pd.DataFrame([{
-                    "Milage_High": data.Milage_High,
-                    "Accident_Impact": data.Accident_Impact,
-                    "Age_Old": data.Age_Old,
-                    "Milage_Medium": data.Milage_Medium,
-                    "clean_title": data.clean_title,
-                    "Milage_Very High": data.Milage_Very_High,
-                    "Vehicle_Age": data.Vehicle_Age,
-                    "hp": data.hp,
-                    "Age_Mid": data.Age_Mid,
-                    "engine displacement": data.engine_displacement,
-                    "brand": data.brand,           # Encoded brand
-                    "fuel_type": data.fuel_type,       # Encoded fuel type
-                    "Age_Very Old": data.Age_Very_Old,
-                    "is_v_engine": data.is_v_engine,
-                    "Mileage_per_Year": data.Mileage_per_Year,
-                    "transmission": data.transmission
+                    "Gender": data.gender,
+                    "Age": data.age,
+                    "Occupation": data.occupation,
+                    "Sleep Duration": data.sleepDuration,
+                    "Quality of Sleep": data.sleepQuality,
+                    "Physical Activity Level": data.physicalActivityLevel,
+                    "Stress Level": data.stressLevel,
+                    "BMI Category": data.bmiCategory,
+                    "Heart Rate": data.heartRate,
+                    "Daily Steps": data.dailySteps,
+                    "Systolic_BP": data.systolicBP,           
+                    "Diastolic_BP": data.diastolicBP, 
                 }])
             
-            print(data)
+            # print(test_data)
             test_data = test_data[features]
             prediction = self.model.predict(test_data)
-            predicted_price = float(np.expm1(prediction[0]))
-            print(predicted_price)
+            predicted_sleep_discord = str(prediction[0][0])
             
-            self.repository.save_prediction(data.dict(), predicted_price)
+            if predicted_sleep_discord =='None':
+                predicted_sleep_discord = 'No Sleep Disorder Detected'
             
-            return PredictionOutput(price=predicted_price)
+            self.repository.save_prediction(data.dict(), predicted_sleep_discord)
+            
+            return PredictionOutput(predictedSleep=predicted_sleep_discord)
         
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))

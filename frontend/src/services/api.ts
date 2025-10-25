@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_URL =  'http://localhost:8000';
 const API_V1_URL = `${API_URL}/v1`;
 
 export interface Conversation {
@@ -87,6 +87,33 @@ export interface StatsResponse {
   conversation_pdfs: number;
 }
 
+
+
+// Prediction
+export interface PredictionInputApi {
+  gender: string;
+  age: number;
+  occupation: string;
+  sleepDuration: number;
+  sleepQuality: number;
+  physicalActivityLevel: number;
+  stressLevel: number;
+  bmiCategory: string;
+  heartRate: number;
+  dailySteps: number;
+  systolicBP: number;
+  diastolicBP: number;
+
+}
+export interface PredictionOutputApi {
+  predictedSleep: string;
+}
+
+export interface PredictionHistoryItem extends PredictionInputApi {
+  _id: string;
+  predictedSleep: string;
+  created_at: string;
+}
 
 const apiClient = axios.create({
   baseURL: API_V1_URL,
@@ -285,6 +312,21 @@ export const apiService = {
     return data as StatsResponse
   },
   
+  // Price Prediction
+  predictPrice: async (payload: PredictionInputApi) => {
+    return retryRequest(async () => {
+      const { data } = await apiClient.post('/predict', payload);
+      console.log(data)
+      return data as PredictionOutputApi;
+    });
+  },
+
+  listPredictions: async () => {
+    return retryRequest(async () => {
+      const { data } = await apiClient.get('/predict/predictions');
+      return data as PredictionHistoryItem[];
+    });
+  },
 
 }
 
