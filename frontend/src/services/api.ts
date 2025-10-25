@@ -111,7 +111,7 @@ export interface PredictionOutputApi {
 
 export interface PredictionHistoryItem extends PredictionInputApi {
   _id: string;
-  predictedSleep: string;
+  predicted_sleep_discord: string;
   created_at: string;
 }
 
