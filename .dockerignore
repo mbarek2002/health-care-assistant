@@ -1,0 +1,11 @@
+# Analyse: ajouté par assistant — ne modifie pas le backend; voir backend-analysis.md pour instructions
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+.git
+.gitignore
+README.md
+.env
+dist
+build

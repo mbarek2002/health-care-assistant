@@ -17,18 +17,18 @@ interface Document {
 const Documents = () => {
   const { toast } = useToast();
   const [documents, setDocuments] = useState<Document[]>([
-    {
-      id: '1',
-      name: 'medical-guidelines.pdf',
-      uploadedAt: new Date('2024-01-15'),
-      size: '2.4 MB',
-    },
-    {
-      id: '2',
-      name: 'health-research.pdf',
-      uploadedAt: new Date('2024-01-10'),
-      size: '1.8 MB',
-    },
+    // {
+    //   id: '1',
+    //   name: 'medical-guidelines.pdf',
+    //   uploadedAt: new Date('2024-01-15'),
+    //   size: '2.4 MB',
+    // },
+    // {
+    //   id: '2',
+    //   name: 'health-research.pdf',
+    //   uploadedAt: new Date('2024-01-10'),
+    //   size: '1.8 MB',
+    // },
   ]);
   const [isUploading, setIsUploading] = useState(false);
 
